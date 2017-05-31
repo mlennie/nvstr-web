@@ -1,4 +1,4 @@
-var citiesInRange = [], citiesOutOfRange = [];
+var citiesOutOfRange = [], citiesInRange = [], cities = [];
 
 function serialize() {
   var data = {},inputs,c,i;
@@ -12,7 +12,7 @@ function serialize() {
 function dataValid(data) {
   return data &&
          data.min && +data.min != NaN &&
-         data.max && +data.max != NaN && data.max > data.min &&
+         data.max && +data.max != NaN && +data.max > +data.min &&
          data.name && data.name.length > 2;
 }
 
@@ -28,7 +28,7 @@ function refreshList(cities,id) {
     max = "<p>Max: " + city.max + "</p>";
     current = "<p>Current: " + city.current + "</p>";
     remove = "<button class=\"remove\" id=\""+String(i)+"\">Remove</button>";
-    html += "<li>"+name+min+max+current+"</li><hr>";
+    html += "<li>"+name+min+max+current+remove+"</li><hr>";
     list.insertAdjacentHTML('beforeend', html);
   }
   removeClickListener();
@@ -43,7 +43,9 @@ function newCitySubmit(e) {
   var data = serialize();
   if (dataValid(data)) {
     data.current = "";
+    data.withinRange = false;
     citiesOutOfRange.push(data);
+    combineLists();
     refreshBothLists();
   } else {
     var message = "Data is not valid. City, Min and Max must be present. " +
@@ -54,22 +56,38 @@ function newCitySubmit(e) {
 }
 
 function combineLists() {
-  var combinedList = citiesOutOfRange;
+  cities = citiesOutOfRange;
   for (var i=0; i<citiesInRange.length;i++) {
-    combinedList.push(citiesInRange[i]);
+    cities.push(citiesInRange[i]);
   }
-  return combinedList;
 }
+
+function separateLists() {
+  citiesOutOfRange = [];
+  citiesInRange = [];
+  var city;
+  for (var i=0; i < cities.length; i++) {
+    city = cities[i]
+    if (city && city.withinRange) {
+      citiesInRange.push(city);
+    } else {
+      citiesOutOfRange.push(city);
+    }
+  }
+
+}
+
 function handleSubmit(e) {
-  var combinedList = combineLists();
+  combineLists();
   var json = JSON.stringify({"cities": combinedList});
   e.preventDefault()
 }
 
 function removeCity(e) {
   var index = +e.target.id;
-  //list.splice(index, 1);
-  //refreshList();
+  cities.splice(index, 1);
+  separateLists();
+  refreshBothLists();
 }
 
 function addClickListener() {
