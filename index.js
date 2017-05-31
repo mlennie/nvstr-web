@@ -2,7 +2,7 @@ var citiesInRange = [], citiesOutOfRange = [];
 
 function serialize() {
   var data = {},inputs,c,i;
-  inputs = [].slice.call(document.forms[0].getElementsByTagName(controls['input']));
+  inputs = [].slice.call(document.forms[0].getElementsByTagName('input'));
   for (i = 0; i < inputs.length; i++) {
     data[inputs[i].name] = inputs[i].value;
   }
@@ -13,7 +13,7 @@ function dataValid(data) {
   return data &&
          data.min && +data.min != NaN &&
          data.max && +data.max != NaN && data.max > data.min &&
-         data.city && data.city.length > 2;
+         data.name && data.name.length > 2;
 }
 
 function refreshList(cities,id) {
@@ -23,24 +23,26 @@ function refreshList(cities,id) {
   for (var i = 0; i < cities.length; i++) {
     html = "";
     city = cities[i];
+    name = "<p>City: " + city.name + "</p>";
     min = "<p>Min: " + city.min + "</p>";
     max = "<p>Max: " + city.max + "</p>";
     current = "<p>Current: " + city.current + "</p>";
     remove = "<button class=\"remove\" id=\""+String(i)+"\">Remove</button>";
-    html += "<li>"+city+min+max+current+"</li><hr>";
+    html += "<li>"+name+min+max+current+"</li><hr>";
     list.insertAdjacentHTML('beforeend', html);
   }
   removeClickListener();
 }
 
 function refreshBothLists() {
-  refreshList(citiesInRange, "citites-in-range");
-  refreshList(citiesOutOfRange, "citites-out-of-range");
+  refreshList(citiesInRange, "cities-in-range");
+  refreshList(citiesOutOfRange, "cities-out-of-range");
 }
 
 function newCitySubmit(e) {
   var data = serialize();
   if (dataValid(data)) {
+    data.current = "";
     citiesOutOfRange.push(data);
     refreshBothLists();
   } else {
@@ -48,7 +50,7 @@ function newCitySubmit(e) {
                   "Max must be greater than min";
     alert(message);
   }
-  e.preventDefault()
+  e.preventDefault();
 }
 
 function combineLists() {
