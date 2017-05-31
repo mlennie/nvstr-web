@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Weather Watcher</title>
+  </head>
+  <body>
+      <h1>Weather Watcher</h1>
+      <div id="list-container">
+        <ol id="cities-in-range"></ol>
+        <ol id="cities-out-of-range"></ol>
+      </div>
+      <div id="form-container">
+        <form>
+          <div>
+            <label>City</label>
+            <input type="text" name="city">
+          </div>
+          <div>
+            <label>Desired Min Temp</label>
+            <input type="number" name="min">
+          </div>
+          <div>
+            <label>Desired Max Temp</label>
+            <input type="number" name="max">
+          </div>
+          <div>
+            <button id="add">Add to List</button>
+          </div>
+          <div>
+            <button type="submit">Update Cities and Temps</button>
+          </div>
+        </form>
+      </div>
+      <script type="text/javascript" src="./index.js"></script>
+  </body>
+</html>
+
