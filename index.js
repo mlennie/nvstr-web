@@ -23,15 +23,23 @@ function refreshList(cities,id) {
   for (var i = 0; i < cities.length; i++) {
     html = "";
     city = cities[i];
+    inRange = city.inRange;
     name = "<p>City: " + city.name + "</p>";
     min = "<p>Min: " + city.min + "</p>";
     max = "<p>Max: " + city.max + "</p>";
     current = "<p>Current: " + city.current + "</p>";
-    remove = "<button class=\"remove\" id=\""+String(i)+"\">Remove</button>";
-    html += "<li>"+name+min+max+current+remove+"</li><hr>";
+    edit = "<button class=\"edit " + inRange +"\" id=\"" + String(i)+"\">Edit</button>";
+    remove = "<button class=\"remove "+ inRange +"\" id=\"" + String(i)+"\">Remove</button>";
+    html += "<li>"+name+min+max+current+edit+remove+"</li><hr>";
     list.insertAdjacentHTML('beforeend', html);
   }
   removeClickListener();
+  editClickListener();
+}
+
+function showEditForm(e) {
+  var id = +e.target.id;
+  var item = document.getElementById(id);
 }
 
 function refreshBothLists() {
@@ -43,7 +51,7 @@ function newCitySubmit(e) {
   var data = serialize();
   if (dataValid(data)) {
     data.current = "";
-    data.withinRange = false;
+    data.inRange = false;
     citiesOutOfRange.push(data);
     combineLists();
     refreshBothLists();
@@ -85,8 +93,12 @@ function handleSubmit(e) {
 
 function removeCity(e) {
   var index = +e.target.id;
-  cities.splice(index, 1);
-  separateLists();
+  if (e.target.classList[1] == "true") {
+    citiesInRange.splice(index, 1);
+  } else {
+    citiesOutOfRange.splice(index, 1);
+  }
+  combineLists();
   refreshBothLists();
 }
 
@@ -107,6 +119,12 @@ function removeClickListener() {
   }
 }
 
+function editClickListener() {
+  var elements = document.getElementsByClassName("edit");
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener("click", showEditForm);
+  }
+}
+
 submitClickListener();
 addClickListener();
-
