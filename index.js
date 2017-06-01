@@ -1,8 +1,8 @@
 var citiesOutOfRange = [], citiesInRange = [], cities = [];
 
-function serialize() {
+function serialize(form) {
   var data = {},inputs,c,i;
-  inputs = [].slice.call(document.forms[0].getElementsByTagName('input'));
+  inputs = [].slice.call(document.forms[form].getElementsByTagName('input'));
   for (i = 0; i < inputs.length; i++) {
     data[inputs[i].name] = inputs[i].value;
   }
@@ -38,8 +38,27 @@ function refreshList(cities,id) {
 }
 
 function showEditForm(e) {
-  var id = +e.target.id;
-  var item = document.getElementById(id);
+  refreshBothLists()
+  var index = +e.target.id;
+  if (e.target.classList[1] == "true") {
+    var containerId = "cities-in-range";
+    var cityList = citiesInRange;
+  } else {
+    var containerId = "cities-out-of-range";
+    var cityList = citiesOutOfRange;
+  }
+  var ol = document.getElementById(containerId)
+  var items = ol.getElementsByTagName("li");
+  var li = items[index];
+  var city = cityList[index]
+  var name = "<div><label>City</label><input type=\"text\" value=\""+city.name+" \"name=\"name\"></div>";
+  var min = "<div><label>Min Temp</label><input type=\"number\" value=\""+city.min+"\" name=\"name\"></div>";
+  var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"name\"></div>";
+  var update = "<button class=\"update-city \" id=\"update-city\">Update</button>";
+  var cancel = "<button class=\"close \" id=\"close-edit-form\">Cancel</button>";
+  var html = "<form id=\"edit-form\">"+name+min+max+update+cancel+"</form>";
+  li.innerHTML = html;
+  cancelEditClickListener();
 }
 
 function refreshBothLists() {
@@ -48,7 +67,8 @@ function refreshBothLists() {
 }
 
 function newCitySubmit(e) {
-  var data = serialize();
+  refreshBothLists();
+  var data = serialize(0);
   if (dataValid(data)) {
     data.current = "";
     data.inRange = false;
@@ -82,7 +102,6 @@ function separateLists() {
       citiesOutOfRange.push(city);
     }
   }
-
 }
 
 function handleSubmit(e) {
@@ -102,6 +121,11 @@ function removeCity(e) {
   refreshBothLists();
 }
 
+function closeEditForm(e) {
+  refreshBothLists()
+  e.preventDefault();
+}
+
 function addClickListener() {
   document.getElementById("add")
           .addEventListener("click", newCitySubmit);
@@ -117,6 +141,11 @@ function removeClickListener() {
   for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener("click", removeCity);
   }
+}
+
+function cancelEditClickListener() {
+  var element = document.getElementById("close-edit-form");
+  element.addEventListener("click", closeEditForm);
 }
 
 function editClickListener() {
