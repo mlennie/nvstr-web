@@ -1,8 +1,8 @@
 var citiesOutOfRange = [], citiesInRange = [], cities = [];
 
-function serialize(form) {
+function serialize() {
   var data = {},inputs,c,i;
-  inputs = [].slice.call(document.forms[form].getElementsByTagName('input'));
+  inputs = [].slice.call(document.forms[0].getElementsByTagName('input'));
   for (i = 0; i < inputs.length; i++) {
     data[inputs[i].name] = inputs[i].value;
   }
@@ -51,14 +51,16 @@ function showEditForm(e) {
   var items = ol.getElementsByTagName("li");
   var li = items[index];
   var city = cityList[index]
+  var inRange = city.inRange;
   var name = "<div><label>City</label><input type=\"text\" value=\""+city.name+" \"name=\"name\"></div>";
-  var min = "<div><label>Min Temp</label><input type=\"number\" value=\""+city.min+"\" name=\"name\"></div>";
-  var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"name\"></div>";
-  var update = "<button class=\"update-city \" id=\"update-city\">Update</button>";
+  var min = "<div><label>Min Temp</label><input type=\"number\" value=\""+city.min+"\" name=\"min\"></div>";
+  var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"max\"></div>";
+  var update = "<button class=\"update-city " + inRange +" \" id=\"" + String(index) + "\">Update</button>";
   var cancel = "<button class=\"close \" id=\"close-edit-form\">Cancel</button>";
-  var html = "<form id=\"edit-form\">"+name+min+max+update+cancel+"</form>";
+  var html = "<form id=\"edit-form " + inRange +"\">"+name+min+max+update+cancel+"</form>";
   li.innerHTML = html;
   cancelEditClickListener();
+  updateCityClickListener();
 }
 
 function refreshBothLists() {
@@ -73,9 +75,14 @@ function resetValues() {
   }
 }
 
+function showDataInvalidMessage() {
+  var message = "Data is not valid. City, Min and Max must be present. " +
+                "Max must be greater than min";
+  alert(message);
+}
 function newCitySubmit(e) {
   refreshBothLists();
-  var data = serialize(0);
+  var data = serialize();
   resetValues();
   if (dataValid(data)) {
     data.current = "";
@@ -84,9 +91,25 @@ function newCitySubmit(e) {
     combineLists();
     refreshBothLists();
   } else {
-    var message = "Data is not valid. City, Min and Max must be present. " +
-                  "Max must be greater than min";
-    alert(message);
+    showDataInvalidMessage();
+  }
+  e.preventDefault();
+}
+
+function updateCity(e) {
+  var data = serialize();
+  if (dataValid(data)) {
+    data.current = "";
+    var index = +e.target.id;
+    if (e.target.classList[1] == "true") {
+      citiesInRange[index] = data;
+    } else {
+      citiesOutOfRange[index] = data;
+    }
+    combineLists();
+    refreshBothLists();
+  } else {
+    showDataInvalidMessage();
   }
   e.preventDefault();
 }
@@ -134,6 +157,10 @@ function closeEditForm(e) {
   e.preventDefault();
 }
 
+/************************************************************
+ * LISTENERS
+ * **********************************************************/
+
 function addClickListener() {
   document.getElementById("add")
           .addEventListener("click", newCitySubmit);
@@ -156,12 +183,21 @@ function cancelEditClickListener() {
   element.addEventListener("click", closeEditForm);
 }
 
+function updateCityClickListener() {
+  var element = document.getElementsByClassName("update-city")[0];
+  element.addEventListener("click", updateCity);
+}
+
 function editClickListener() {
   var elements = document.getElementsByClassName("edit");
   for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener("click", showEditForm);
   }
 }
+
+/************************************************************
+ * INITIATORS
+ * **********************************************************/
 
 submitClickListener();
 addClickListener();
