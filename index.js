@@ -66,9 +66,17 @@ function refreshBothLists() {
   refreshList(citiesOutOfRange, "cities-out-of-range");
 }
 
+function resetValues() {
+  var inputs = document.forms[0].getElementsByTagName('input')
+  for (var i=0;i<inputs.length;i++) {
+    inputs[i].value = null;
+  }
+}
+
 function newCitySubmit(e) {
   refreshBothLists();
   var data = serialize(0);
+  resetValues();
   if (dataValid(data)) {
     data.current = "";
     data.inRange = false;
