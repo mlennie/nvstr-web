@@ -51,7 +51,7 @@ function showEditForm(e) {
   var items = ol.getElementsByTagName("li");
   var li = items[index];
   var city = cityList[index]
-  var inRange = city.inRange;
+  var inRange = city.in_range;
   var name = "<div><label>City</label><input type=\"text\" value=\""+city.name+" \"name=\"name\"></div>";
   var min = "<div><label>Min Temp</label><input type=\"number\" value=\""+city.min+"\" name=\"min\"></div>";
   var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"max\"></div>";
@@ -106,9 +106,14 @@ function newCitySubmit(e) {
 function replaceCity(e, city) {
   var index = +e.target.id;
   if (e.target.classList[1] == "true") {
-    citiesInRange[index] = city;
+    citiesInRange.splice(index,1);
   } else {
-    citiesOutOfRange[index] = city;
+    citiesOutOfRange.splice(index,1);
+  }
+  if (city && city.in_range) {
+    citiesInRange.splice(index,0,city);
+  } else {
+    citiesOutOfRange.splice(index,0,city);
   }
   combineLists();
   refreshBothLists();
@@ -131,12 +136,16 @@ function updateCities() {
 
 function updateCity(e) {
   var city = serialize();
-  resetFormValues();
   if (dataValid(city)) {
-    data.current = "";
     var options = {"data":{"city": city}};
     sendApiRequest(options, function(err,response) {
-      replaceCity(e,response)
+      if (err || response["error"]) {
+        //console.error(err)
+        alert("There was a problem editing your city");
+      } else {
+        replaceCity(e,response)
+        updateCities();
+      }
     });
   } else {
     showDataInvalidMessage();
