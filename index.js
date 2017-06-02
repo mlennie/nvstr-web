@@ -88,7 +88,6 @@ function newCitySubmit(e) {
     city.current = "";
     var options = {"data":{"city": city}};
     sendApiRequest(options, function(err,response) {
-      debugger;
       if (err || response["error"]) {
         //console.error(err)
         alert("There was a problem adding your city");
@@ -118,7 +117,6 @@ function replaceCity(e, city) {
 function updateCities() {
   var options = { "data":{"cities": JSON.stringify(cities)},"multiple":true};
   sendApiRequest(options, function(err,response) {
-    debugger;
     if (err || response["error"]) {
       error = err || response["error"]
       //console.error(error)
@@ -136,9 +134,8 @@ function updateCity(e) {
   resetFormValues();
   if (dataValid(city)) {
     data.current = "";
-    var options = {"data":JSON.stringify({"city": city})};
+    var options = {"data":{"city": city}};
     sendApiRequest(options, function(err,response) {
-      debugger;
       replaceCity(e,response)
     });
   } else {
@@ -184,18 +181,9 @@ function sendApiRequest(options,callback) {
   });
 }
 
-function handleSubmit(e) {
-  combineLists();
-  var json = JSON.stringify({"cities": combinedList});
-  $.ajax({
-    url: "http://172.17.0.2:3000",
-    method: "POST",
-    dataType: "json",
-    data: json
-  })
-  .done(handleResponse)
-  .error(handleError);
-  e.preventDefault()
+function refreshTemps(e) {
+  updateCities();
+  e.preventDefault();
 }
 
 function removeCity(e) {
@@ -223,9 +211,9 @@ function addClickListener() {
           .addEventListener("click", newCitySubmit);
 }
 
-function submitClickListener() {
-  document.forms[0]
-          .addEventListener("submit", handleSubmit);
+function refreshClickListener() {
+  var element = document.getElementById("refresh");
+  element.addEventListener("click", refreshTemps);
 }
 
 function removeClickListener() {
@@ -256,5 +244,5 @@ function editClickListener() {
  * INITIATORS
  * **********************************************************/
 
-submitClickListener();
+refreshClickListener();
 addClickListener();
