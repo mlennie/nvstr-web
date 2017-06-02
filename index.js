@@ -68,7 +68,7 @@ function refreshBothLists() {
   refreshList(citiesOutOfRange, "cities-out-of-range");
 }
 
-function resetValues() {
+function resetFormValues() {
   var inputs = document.forms[0].getElementsByTagName('input')
   for (var i=0;i<inputs.length;i++) {
     inputs[i].value = null;
@@ -81,33 +81,66 @@ function showDataInvalidMessage() {
   alert(message);
 }
 function newCitySubmit(e) {
-  refreshBothLists();
-  var data = serialize();
-  resetValues();
-  if (dataValid(data)) {
-    data.current = "";
-    data.inRange = false;
-    citiesOutOfRange.push(data);
-    combineLists();
-    refreshBothLists();
+  e.preventDefault();
+  var city = serialize();
+
+  if (dataValid(city)) {
+    city.current = "";
+    var options = {"data":{"city": city}};
+    sendApiRequest(options, function(err,response) {
+      debugger;
+      if (err || response["error"]) {
+        //console.error(err)
+        alert("There was a problem adding your city");
+      } else {
+        resetFormValues();
+        cities.push(response)
+        updateCities();
+      }
+    });
+
   } else {
     showDataInvalidMessage();
   }
-  e.preventDefault();
+}
+
+function replaceCity(e, city) {
+  var index = +e.target.id;
+  if (e.target.classList[1] == "true") {
+    citiesInRange[index] = city;
+  } else {
+    citiesOutOfRange[index] = city;
+  }
+  combineLists();
+  refreshBothLists();
+}
+
+function updateCities() {
+  var options = { "data":{"cities": JSON.stringify(cities)},"multiple":true};
+  sendApiRequest(options, function(err,response) {
+    debugger;
+    if (err || response["error"]) {
+      error = err || response["error"]
+      //console.error(error)
+      alert("There was a problem updating cities");
+    } else {
+      cities = response;
+      separateLists();
+      refreshBothLists();
+    }
+  });
 }
 
 function updateCity(e) {
-  var data = serialize();
-  if (dataValid(data)) {
+  var city = serialize();
+  resetFormValues();
+  if (dataValid(city)) {
     data.current = "";
-    var index = +e.target.id;
-    if (e.target.classList[1] == "true") {
-      citiesInRange[index] = data;
-    } else {
-      citiesOutOfRange[index] = data;
-    }
-    combineLists();
-    refreshBothLists();
+    var options = {"data":JSON.stringify({"city": city})};
+    sendApiRequest(options, function(err,response) {
+      debugger;
+      replaceCity(e,response)
+    });
   } else {
     showDataInvalidMessage();
   }
@@ -135,9 +168,33 @@ function separateLists() {
   }
 }
 
+function sendApiRequest(options,callback) {
+  var path = options["multiple"] ? "/cities" : "/city"
+  $.ajax({
+    url: "http://172.17.0.2:3000" + path,
+    method: "POST",
+    dataType: "json",
+    data: options["data"]
+  })
+  .done(function(response) {
+    callback(null,response)
+  })
+  .fail(function(err,one,two) {
+    callback(err)
+  });
+}
+
 function handleSubmit(e) {
   combineLists();
   var json = JSON.stringify({"cities": combinedList});
+  $.ajax({
+    url: "http://172.17.0.2:3000",
+    method: "POST",
+    dataType: "json",
+    data: json
+  })
+  .done(handleResponse)
+  .error(handleError);
   e.preventDefault()
 }
 
