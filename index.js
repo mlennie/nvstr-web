@@ -23,7 +23,7 @@ function refreshList(cities,id) {
   for (var i = 0; i < cities.length; i++) {
     html = "";
     city = cities[i];
-    inRange = city.inRange;
+    inRange = city.in_range;
     name = "<p>City: " + city.name + "</p>";
     min = "<p>Min: " + city.min + "</p>";
     max = "<p>Max: " + city.max + "</p>";
@@ -157,7 +157,7 @@ function separateLists() {
   var city;
   for (var i=0; i < cities.length; i++) {
     city = cities[i]
-    if (city && city.withinRange) {
+    if (city && city.in_range) {
       citiesInRange.push(city);
     } else {
       citiesOutOfRange.push(city);
