@@ -16,13 +16,13 @@ function dataValid(data) {
          data.name && data.name.length > 2;
 }
 
-function refreshList(cities,id) {
+function refreshList(cities_by_range,id) {
   var html,city,min,max,currentTemp;
   var list = document.getElementById(id);
   list.innerHTML = "";
-  for (var i = 0; i < cities.length; i++) {
+  for (var i = 0; i < cities_by_range.length; i++) {
     html = "";
-    city = cities[i];
+    city = cities_by_range[i];
     inRange = city.in_range;
     name = "<p>City: " + city.name + "</p>";
     min = "<p>Min: " + city.min + "</p>";
@@ -154,9 +154,12 @@ function updateCity(e) {
 }
 
 function combineLists() {
-  cities = citiesOutOfRange;
+  cities = []
   for (var i=0; i<citiesInRange.length;i++) {
     cities.push(citiesInRange[i]);
+  }
+  for (var i=0; i<citiesOutOfRange.length;i++) {
+    cities.push(citiesOutOfRange[i]);
   }
 }
 
