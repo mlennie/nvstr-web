@@ -9,6 +9,10 @@ h1 {
   text-align: center;
 }
 
+#edit-form {
+  background-color: #fff;
+}
+
 .full {
   width: 100%;
 }
