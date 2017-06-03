@@ -12,10 +12,20 @@
   </head>
   <body>
       <h1>Weather Watcher</h1>
-      <div id="list-container">
-        <ul class="list-group" id="cities-in-range"></ul>
-        <ul class="list-group" id="cities-out-of-range"></ul>
-      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>City</th>
+            <th>Min Temp</th>
+            <th>Max Temp</th>
+            <th>Current Temp</th>
+            <th>Edit</th>
+            <th>Remove</th>
+            <th>In Range?</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
       <div id="form-container">
         <form>
           <div>

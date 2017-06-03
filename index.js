@@ -16,29 +16,30 @@ function dataValid(data) {
          data.name && data.name.length > 2;
 }
 
-function refreshList(cities_by_range,id) {
+function refreshTable() {
   var html,city,min,max,currentTemp;
-  var list = document.getElementById(id);
-  list.innerHTML = "";
-  for (var i = 0; i < cities_by_range.length; i++) {
+  var table = document.getElementById("table-body");
+  table.innerHTML = "";
+  for (var i = 0; i < cities.length; i++) {
     html = "";
-    city = cities_by_range[i];
+    city = cities[i];
     inRange = city.in_range;
-    name = "<p>City: " + city.name + "</p>";
-    min = "<p>Min: " + city.min + "</p>";
-    max = "<p>Max: " + city.max + "</p>";
-    current = "<p>Current: " + city.current + "</p>";
-    edit = "<button class=\"edit " + inRange +"\" id=\"" + String(i)+"\">Edit</button>";
-    remove = "<button class=\"remove "+ inRange +"\" id=\"" + String(i)+"\">Remove</button>";
-    html += "<li class=\"list-group-item\">"+name+min+max+current+edit+remove+"</li><hr>";
-    list.insertAdjacentHTML('beforeend', html);
+    name = "<td>" + city.name + "</td>";
+    min = "<td>" + city.min + "</td>";
+    max = "<td>" + city.max + "</td>";
+    current = "<td>" + city.current + "</td>";
+    in_range = "<td>" + city.in_range + "</td>";
+    edit = "<td><button class=\"edit " + inRange +"\" id=\"" + String(i)+"\">Edit</button></td>";
+    remove = "<td><button class=\"remove "+ inRange +"\" id=\"" + String(i)+"\">Remove</button></td>";
+    html += "<tr class=\"row-inrange-" + inRange+"\">"+name+min+max+current+edit+remove+in_range+"</tr>";
+    table.insertAdjacentHTML('beforeend', html);
   }
   removeClickListener();
   editClickListener();
 }
 
 function showEditForm(e) {
-  refreshBothLists()
+  //refreshBothLists()
   var index = +e.target.id;
   if (e.target.classList[1] == "true") {
     var containerId = "cities-in-range";
@@ -61,11 +62,6 @@ function showEditForm(e) {
   li.innerHTML = html;
   cancelEditClickListener();
   updateCityClickListener();
-}
-
-function refreshBothLists() {
-  refreshList(citiesInRange, "cities-in-range");
-  refreshList(citiesOutOfRange, "cities-out-of-range");
 }
 
 function resetFormValues() {
@@ -116,7 +112,7 @@ function replaceCity(e, city) {
     citiesOutOfRange.splice(index,0,city);
   }
   combineLists();
-  refreshBothLists();
+  refreshTable();
 }
 
 function updateCities() {
@@ -129,7 +125,7 @@ function updateCities() {
     } else {
       cities = response;
       separateLists();
-      refreshBothLists();
+      refreshTable();
     }
   });
 }
@@ -177,6 +173,11 @@ function separateLists() {
   }
 }
 
+function reorderLists() {
+  separateLists();
+  combineLists();
+}
+
 function sendApiRequest(options,callback) {
   var path = options["multiple"] ? "/cities" : "/city"
   $.ajax({
@@ -206,11 +207,11 @@ function removeCity(e) {
     citiesOutOfRange.splice(index, 1);
   }
   combineLists();
-  refreshBothLists();
+  refreshTable();
 }
 
 function closeEditForm(e) {
-  refreshBothLists()
+  refreshTable()
   e.preventDefault();
 }
 

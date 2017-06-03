@@ -13,19 +13,9 @@ h1 {
   width: 100%;
 }
 
-ul {
-  display: flex;
-  flex-direction: column;
-  max-width: 300px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-li {
-  display: flex;
-  max-width: 300px;
-  margin: 0 auto;
-  flex-direction: column !important;
+.row-inrange-true {
+  color: #fff;
+  background-color: #00D255;
 }
 
 #form-container {
