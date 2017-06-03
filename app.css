@@ -5,8 +5,16 @@ body {
   flex-direction: column;
 }
 
-h1 {
+h1, h3 {
   text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.card {
+  padding: 20px;
 }
 
 #refresh {
@@ -18,7 +26,7 @@ h1 {
 }
 
 .full {
-  width: 100%;
+  width: 300px;
 }
 
 .row-inrange-true {
@@ -27,6 +35,6 @@ h1 {
 }
 
 #form-container {
-  max-width: 300px;
+  max-width: 350px;
   margin: 0 auto;
 }
