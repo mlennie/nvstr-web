@@ -48,10 +48,8 @@ function showEditForm(e) {
   var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"max\"></div>";
   var update = "<button class=\"update-city btn btn-primary " + inRange +" \" id=\"" + String(index) + "\">Update</button>";
   var cancel = "<button class=\"close btn btn-danger\" id=\"close-edit-form\">Cancel</button>";
-  var html = "<form id=\"edit-form\"></form>";
-  $("#tr-"+String(index)).after(html);
-  tr.remove();
-  document.getElementById("edit-form").innerHTML = name+min+max+update+cancel
+  var html = "<form data-index=\""+String(index)+"\" id=\"edit-form " + inRange +"\">"+name+min+max+update+cancel+"</form>";
+  $("#tr-"+String(index)).replaceWith(html)
   cancelEditClickListener();
   updateCityClickListener();
 }
@@ -92,18 +90,8 @@ function newCitySubmit(e) {
 }
 
 function replaceCity(e, city) {
-  var index = +e.target.id;
-  if (e.target.classList[1] == "true") {
-    citiesInRange.splice(index,1);
-  } else {
-    citiesOutOfRange.splice(index,1);
-  }
-  if (city && city.in_range) {
-    citiesInRange.splice(index,0,city);
-  } else {
-    citiesOutOfRange.splice(index,0,city);
-  }
-  combineCities();
+  cities.splice(+e.target.id,1,city);
+  reorderCities();
   refreshTable();
 }
 
@@ -193,11 +181,7 @@ function refreshTemps(e) {
 
 function removeCity(e) {
   var index = +e.target.id;
-  if (e.target.classList[1] == "true") {
-    citiesInRange.splice(index, 1);
-  } else {
-    citiesOutOfRange.splice(index, 1);
-  }
+  cities.splice(index, 1);
   reorderCities();
   refreshTable();
 }
