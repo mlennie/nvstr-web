@@ -111,7 +111,7 @@ function replaceCity(e, city) {
   } else {
     citiesOutOfRange.splice(index,0,city);
   }
-  combineLists();
+  combineCities();
   refreshTable();
 }
 
@@ -124,7 +124,7 @@ function updateCities() {
       alert("There was a problem updating cities");
     } else {
       cities = response;
-      separateLists();
+      reorderCities();
       refreshTable();
     }
   });
@@ -149,7 +149,7 @@ function updateCity(e) {
   e.preventDefault();
 }
 
-function combineLists() {
+function combineCities() {
   cities = []
   for (var i=0; i<citiesInRange.length;i++) {
     cities.push(citiesInRange[i]);
@@ -159,7 +159,7 @@ function combineLists() {
   }
 }
 
-function separateLists() {
+function separateCities() {
   citiesOutOfRange = [];
   citiesInRange = [];
   var city;
@@ -173,9 +173,9 @@ function separateLists() {
   }
 }
 
-function reorderLists() {
-  separateLists();
-  combineLists();
+function reorderCities() {
+  separateCities();
+  combineCities();
 }
 
 function sendApiRequest(options,callback) {
@@ -206,7 +206,7 @@ function removeCity(e) {
   } else {
     citiesOutOfRange.splice(index, 1);
   }
-  combineLists();
+  reorderCities();
   refreshTable();
 }
 
