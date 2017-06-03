@@ -1,0 +1,34 @@
+body {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+h1 {
+  text-align: center;
+}
+
+.full {
+  width: 100%;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+li {
+  display: flex;
+  max-width: 300px;
+  margin: 0 auto;
+  flex-direction: column !important;
+}
+
+#form-container {
+  max-width: 300px;
+  margin: 0 auto;
+}

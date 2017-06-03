@@ -3,12 +3,18 @@
   <head>
     <meta charset="utf-8">
     <title>Weather Watcher</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.3.0/css/mdb.min.css"
+          rel="stylesheet">
+    <link href="./app.css"
+          rel="stylesheet">
+
   </head>
   <body>
       <h1>Weather Watcher</h1>
       <div id="list-container">
-        <ol id="cities-in-range"></ol>
-        <ol id="cities-out-of-range"></ol>
+        <ul class="list-group" id="cities-in-range"></ul>
+        <ul class="list-group" id="cities-out-of-range"></ul>
       </div>
       <div id="form-container">
         <form>
@@ -25,10 +31,10 @@
             <input type="number" name="max">
           </div>
           <div>
-            <button id="add">Add to List</button>
+            <button class="full btn btn-primary" id="add">Add to List</button>
           </div>
           <div>
-            <button id="refresh">Refresh Temps</button>
+            <button class="full btn btn-success" id="refresh">Refresh Temps</button>
           </div>
         </form>
       </div>
@@ -36,7 +42,10 @@
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
       <script type="text/javascript" src="./index.js"></script>
+
   </body>
 </html>
 

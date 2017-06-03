@@ -30,7 +30,7 @@ function refreshList(cities_by_range,id) {
     current = "<p>Current: " + city.current + "</p>";
     edit = "<button class=\"edit " + inRange +"\" id=\"" + String(i)+"\">Edit</button>";
     remove = "<button class=\"remove "+ inRange +"\" id=\"" + String(i)+"\">Remove</button>";
-    html += "<li>"+name+min+max+current+edit+remove+"</li><hr>";
+    html += "<li class=\"list-group-item\">"+name+min+max+current+edit+remove+"</li><hr>";
     list.insertAdjacentHTML('beforeend', html);
   }
   removeClickListener();
