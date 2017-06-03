@@ -9,6 +9,10 @@ h1 {
   text-align: center;
 }
 
+#refresh {
+  width: 300px;
+}
+
 #edit-form {
   background-color: #fff;
 }

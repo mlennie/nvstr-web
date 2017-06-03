@@ -1,5 +1,9 @@
 var citiesOutOfRange = [], citiesInRange = [], cities = [];
 
+/************************************************************
+ * FUNCTIONS
+ * **********************************************************/
+
 function serialize() {
   var data = {},inputs,c,i;
   inputs = [].slice.call(document.forms[0].getElementsByTagName('input'));
@@ -14,44 +18,6 @@ function dataValid(data) {
          data.min && +data.min != NaN &&
          data.max && +data.max != NaN && +data.max > +data.min &&
          data.name && data.name.length > 2;
-}
-
-function refreshTable() {
-  var html,city,min,max,currentTemp;
-  var table = document.getElementById("table-body");
-  table.innerHTML = "";
-  for (var i = 0; i < cities.length; i++) {
-    html = "";
-    city = cities[i];
-    inRange = city.in_range;
-    name = "<td>" + city.name + "</td>";
-    min = "<td>" + city.min + "</td>";
-    max = "<td>" + city.max + "</td>";
-    current = "<td>" + city.current + "</td>";
-    in_range = "<td>" + city.in_range + "</td>";
-    edit = "<td><button class=\"edit btn btn-sm btn-primary " + inRange +"\" id=\"" + String(i)+"\">Edit</button></td>";
-    remove = "<td><button class=\"remove btn btn-sm btn-danger "+ inRange +"\" id=\"" + String(i)+"\">Remove</button></td>";
-    html += "<tr id=\"tr-"+String(i)+"\" class=\"row-inrange-" + inRange+"\">"+name+min+max+current+edit+remove+in_range+"</tr>";
-    table.insertAdjacentHTML('beforeend', html);
-  }
-  removeClickListener();
-  editClickListener();
-}
-
-function showEditForm(e) {
-  var index = +e.target.id;
-  var tr = document.getElementById("tr-"+String(index))
-  var city = cities[index]
-  var inRange = city.in_range;
-  var name = "<div><label>City</label><input type=\"text\" value=\""+city.name+" \"name=\"name\"></div>";
-  var min = "<div><label>Min Temp</label><input type=\"number\" value=\""+city.min+"\" name=\"min\"></div>";
-  var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"max\"></div>";
-  var update = "<button class=\"update-city btn btn-primary " + inRange +" \" id=\"" + String(index) + "\">Update</button>";
-  var cancel = "<button class=\"close btn btn-danger\" id=\"close-edit-form\">Cancel</button>";
-  var html = "<form data-index=\""+String(index)+"\" id=\"edit-form " + inRange +"\">"+name+min+max+update+cancel+"</form>";
-  $("#tr-"+String(index)).replaceWith(html)
-  cancelEditClickListener();
-  updateCityClickListener();
 }
 
 function resetFormValues() {
@@ -189,6 +155,48 @@ function removeCity(e) {
 function closeEditForm(e) {
   refreshTable()
   e.preventDefault();
+}
+
+/************************************************************
+ * TEMPLATES
+ * **********************************************************/
+
+function refreshTable() {
+  var html,city,min,max,currentTemp;
+  var table = document.getElementById("table-body");
+  table.innerHTML = "";
+  for (var i = 0; i < cities.length; i++) {
+    html = "";
+    city = cities[i];
+    inRange = city.in_range;
+    name = "<td>" + city.name + "</td>";
+    min = "<td>" + city.min + "</td>";
+    max = "<td>" + city.max + "</td>";
+    current = "<td>" + city.current + "</td>";
+    in_range = "<td>" + city.in_range + "</td>";
+    edit = "<td><button class=\"edit btn btn-sm btn-primary " + inRange +"\" id=\"" + String(i)+"\">Edit</button></td>";
+    remove = "<td><button class=\"remove btn btn-sm btn-danger "+ inRange +"\" id=\"" + String(i)+"\">Remove</button></td>";
+    html += "<tr id=\"tr-"+String(i)+"\" class=\"row-inrange-" + inRange+"\">"+name+min+max+current+edit+remove+in_range+"</tr>";
+    table.insertAdjacentHTML('beforeend', html);
+  }
+  removeClickListener();
+  editClickListener();
+}
+
+function showEditForm(e) {
+  var index = +e.target.id;
+  var tr = document.getElementById("tr-"+String(index))
+  var city = cities[index]
+  var inRange = city.in_range;
+  var name = "<div><label>City</label><input type=\"text\" value=\""+city.name+" \"name=\"name\"></div>";
+  var min = "<div><label>Min Temp</label><input type=\"number\" value=\""+city.min+"\" name=\"min\"></div>";
+  var max = "<div><label>Max Temp</label><input type=\"number\" value=\""+city.max+"\" name=\"max\"></div>";
+  var update = "<button class=\"update-city btn btn-primary " + inRange +" \" id=\"" + String(index) + "\">Update</button>";
+  var cancel = "<button class=\"close btn btn-danger\" id=\"close-edit-form\">Cancel</button>";
+  var html = "<form data-index=\""+String(index)+"\" id=\"edit-form " + inRange +"\">"+name+min+max+update+cancel+"</form>";
+  $("#tr-"+String(index)).replaceWith(html)
+  cancelEditClickListener();
+  updateCityClickListener();
 }
 
 /************************************************************
